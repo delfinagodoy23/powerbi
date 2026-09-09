@@ -16,3 +16,23 @@ in
     #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"mes", type date}, {"cuit", type text}, {"provincia", type text}, {"municipio", type text}, {"monto", Int64.Type}, {"tipo", type text}})
 in
     #"Changed Type"
+
+### ¿Por qué es útil para un analista de datos entender la estructura `let … in`?
+
+Entender la estructura `let … in` es útil porque permite comprender cómo Power Query organiza y ejecuta las transformaciones de los datos. Dentro de `let` se definen los distintos pasos de la consulta y cada paso puede utilizar como entrada el resultado del paso anterior. Por su parte, `in` indica cuál de esos pasos será devuelto como resultado final.
+
+Para un analista de datos, comprender esta estructura facilita la lectura del código generado automáticamente, la detección de errores y la modificación manual de transformaciones sin depender exclusivamente de la interfaz gráfica de Power Query.
+
+### ¿Qué significa que el lenguaje M sea Case Sensitive y cuál es la consecuencia práctica de ignorarlo?
+
+Que el lenguaje M sea **Case Sensitive** significa que distingue entre letras mayúsculas y minúsculas. Por lo tanto, los nombres de funciones, variables y pasos deben escribirse exactamente como fueron definidos.
+
+Por ejemplo, `Table.SelectRows` y `table.selectrows` no son equivalentes. La primera expresión corresponde a una función válida de M, mientras que la segunda puede producir un error.
+
+La consecuencia práctica de ignorar esta característica es que una consulta puede dejar de ejecutarse correctamente por un simple cambio entre mayúsculas y minúsculas. Por eso, al modificar código en el Editor Avanzado es importante respetar exactamente la sintaxis y los nombres utilizados.
+
+### ¿Por qué elegiste ese dataset y qué criterios usaste para seleccionarlo?
+
+Elegí este dataset de transporte porque su estructura permite practicar de manera clara las transformaciones solicitadas en el ejercicio. Contiene más de cinco columnas y diferentes tipos de datos, incluyendo texto, números enteros, provincia y fechas.
+
+Los principales criterios utilizados para seleccionarlo fueron la variedad de tipos de datos, la cantidad de columnas, la presencia de nombres técnicos y la posibilidad de realizar transformaciones representativas de un proceso de preparación de datos en Power Query.
