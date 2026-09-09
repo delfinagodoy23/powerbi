@@ -1,0 +1,18 @@
+let
+    aportes_colectivoscd = let
+    Source = Excel.Workbook(File.Contents("C:\Users\godoyd\Downloads\aportes_colectivoscd.xlsx"), null, true),
+    aportes_colectivoscd_Sheet = Source{[Item="aportes_colectivoscd",Kind="Sheet"]}[Data],
+    #"Changed Type" = Table.TransformColumnTypes(aportes_colectivoscd_Sheet,{{"Column1", type text}}),
+    #"Split Column by Delimiter" = Table.SplitColumn(#"Changed Type", "Column1", Splitter.SplitTextByDelimiter(";", QuoteStyle.Csv), {"Column1.1", "Column1.2", "Column1.3", "Column1.4", "Column1.5", "Column1.6"}),
+    #"Changed Type1" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Column1.1", type text}, {"Column1.2", type text}, {"Column1.3", type text}, {"Column1.4", type text}, {"Column1.5", type text}, {"Column1.6", type text}}),
+   //Remombro Columnas con numero por palabras para que sean descriptivas
+    #"MiTransformacionManual" = Table.RenameColumns(#"Changed Type1",{{"Column1.1", "Mes"}, {"Column1.2", "CUIT"}, {"Column1.3", "Provincia"}, {"Column1.4", "Municipio"}, {"Column1.5", "Monto"}, {"Column1.6", "Tipo"}}),
+    #"Removed Top Rows" = Table.Skip(#"Renamed Columns",1),
+    #"Changed Type2" = Table.TransformColumnTypes(#"Removed Top Rows",{{"Mes", type date}}),
+    #"Filtered Rows" = Table.SelectRows(#"Changed Type2", each ([Provincia] = "BUENOS AIRES"))
+in
+    #"MiTransformacionManual",
+    #"Promoted Headers" = Table.PromoteHeaders(aportes_colectivoscd, [PromoteAllScalars=true]),
+    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"mes", type date}, {"cuit", type text}, {"provincia", type text}, {"municipio", type text}, {"monto", Int64.Type}, {"tipo", type text}})
+in
+    #"Changed Type"
